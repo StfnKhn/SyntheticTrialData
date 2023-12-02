@@ -1,0 +1,123 @@
+defaults:
+  - dataset: luxo
+  - auditor/sequential: auditor.yaml
+  - auditor/static: auditor.yaml
+  - vocabulary: vocab
+
+action:
+  auditor:
+    static:
+      use_existing_model: True
+      use_existing_auditor: True
+    sequential:
+      use_existing_model: True
+      use_existing_auditor: True
+  tuning:
+    tune_static_model: True
+    tune_sequential_model: False
+
+model_checkpoints_dir: "model_checkpoints"
+
+mlflow:
+  tracking_uri: mlruns
+  static_model:
+    experiment_name: static_luxo_final
+  sequential_model:
+    experiment_name: sequential_luxo_long
+
+validation:
+  val_size: 0.2
+
+preprocessing:
+  sequential:
+    max_event_count: 10
+    min_seq_len: 2
+    sequencing_strategy: "sampled"
+    N_samples: 3
+    n_bins: 300
+
+hyper_parameter_tuning:
+  n_trials: 1
+  static_model:
+    model_classes:
+      - pategan
+      #- ddpm
+      #- adsgan
+      #- privbayes
+      #- gmm
+      #- GaussianCopular
+      #- TVAE
+  sequential_model:
+    n_trials: 10
+    model_classes:
+      - TabFormerGPT2
+      - PARSynthesizer
+
+sampling:
+  seeds:
+    static_models: [11, 42, 80, 111]
+    sequential_models: [11, 42]
+  
+synthcity_models:
+  gmm:
+    training_params:
+      covariance_type: ["full", "tied", "diag", "spherical"]
+      n_components:
+        high: 20
+        low: 1
+      max_iter:
+        high: 80
+        low: 10
+  pategan:
+    training_params:
+      n_iter:
+        high: 201
+        low: 199
+
+sdv_models:
+  preprocessing:
+    new_unique_id_col: "unique_id"
+  GaussianCopular:
+    training_params:
+      default_distribution: 
+        - norm
+        - beta
+        - truncnorm
+        - uniform
+        - gamma
+        - gaussian_kde
+  TVAE:
+    training_params:
+      epochs: [128, 1024, 4096]
+
+TabFormerGPT2:
+  model_checkpoint:
+    name: "best_model"
+    path_to_dir: "../model_checkpoints/TabGPT/checkpoints"
+  val_size: 0.2
+  training_params:
+    epochs: [2, 8, 16]
+    logging_steps: 5
+    learning_rate:
+      high: 1e-4
+      low: 1e-6
+    warmup_ratio: [0, 0.01]
+    lr_scheduler_type: ["linear", "cosine", "polynomial"]
+  sampling:
+    decoding_strategy: ["greedy", "other"] # or
+    N_events: 10
+    temperature:
+      high: 0.9
+      low: 0.1
+    batch_size: 8
+
+PARSynthesizer:
+  model_checkpoint:
+    name: "best_model"
+    path_to_dir: "../model_checkpoints/PARSynthesizer"
+  training_params:
+    epochs: [128, 1024, 4096,]
+    sample_size:
+      high: 100
+      low: 4
+

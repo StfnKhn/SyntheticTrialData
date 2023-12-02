@@ -1,0 +1,68 @@
+defaults:
+  - dataset: study_15982
+  - auditor/sequential: auditor.yaml
+  - auditor/static: auditor.yaml
+  - vocabulary: vocab
+
+action:
+  auditor:
+    static:
+      use_existing_model: True
+      use_existing_auditor: True
+  tuning:
+    tune_static_model: True
+
+model_checkpoints_dir: "model_checkpoints"
+
+mlflow:
+  tracking_uri: mlruns
+  static_model:
+    experiment_name: survival_dataset
+
+validation:
+  val_size: 0.25
+
+
+hyper_parameter_tuning:
+  n_trials: 5
+  static_model:
+    model_classes:
+      - pategan
+      #- ddpm
+      #- adsgan
+      #- privbayes
+      #- gmm
+      #- GaussianCopular
+      #- TVAE
+
+sampling:
+  seeds:
+    static_models: [11, 42, 80, 111]
+    sequential_models: [11, 42]
+  
+synthcity_models:
+  gmm:
+    training_params:
+      covariance_type: ["full", "tied", "diag", "spherical"]
+      n_components:
+        high: 20
+        low: 1
+      max_iter:
+        high: 80
+        low: 10
+
+sdv_models:
+  preprocessing:
+    new_unique_id_col: "unique_id"
+  GaussianCopular:
+    training_params:
+      default_distribution: 
+        - norm
+        - beta
+        - truncnorm
+        - uniform
+        - gamma
+        - gaussian_kde
+  TVAE:
+    training_params:
+      epochs: [128, 1024, 4096]

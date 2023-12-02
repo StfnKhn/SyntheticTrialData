@@ -1,0 +1,9 @@
+# config/vocabulary/vocab.yaml
+
+sep_token: "[START_EVENT]"
+missing_token: "[MISSING]"
+unk_token: "[UNK]"
+pad_token: "[PAD]"
+bos_token: "[BOS]"
+eos_token: "[EOS]"
+special_field_tag: "SPECIAL"

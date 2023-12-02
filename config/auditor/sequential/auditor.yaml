@@ -1,0 +1,25 @@
+# config/auditor/sequential/auditor.yaml
+
+path_to_auditor: "model_checkpoints/auditor/sequential_data/auditor.pkl"
+path_to_model: "model_checkpoints/auditor/sequential_data/model.pkl"
+model_plugin:
+  name: "PARSynthesizer"
+  params:
+    sample_size: 10
+    epochs: 10
+
+trust_dimensions:
+  fidelity_evaluators:
+    - CrossCorrelationDifference
+    - AutoCorrelationDifference
+  privacy_evaluators:
+    - "epsilon-identifiability"
+    - "Attribute Disclosure Risk"
+  weights:
+    privacy: 0.5
+    fidelity: 0.5
+
+optional_params:
+  reference_size: 10
+
+fractions: [0, 0.1, 0.15, 0.5, 0.61, 0.73, 0.8, 0.81, 1]

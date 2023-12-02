@@ -1,5 +1,5 @@
 # SyntheticTrialData
-This repository provides a codebase for the generation of static and longitudinal synthetic clinical trial data. This code was developed and published as part of a master thesis at the TU Berlin.
+This repository provides a codebase for the generation of static and longitudinal synthetic clinical trial data. This code was developed and published by Stefan Kuhn as part of a master thesis with the title *Syntetic Trial Data: Generation and Review of Synthetic Clinical Trial Data in Oncology* at the TU Berlin.
 
 ## Installation Guide
 #### Install Dependencies with Poetry

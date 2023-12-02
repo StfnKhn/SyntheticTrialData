@@ -1,5 +1,5 @@
 defaults:
-  - dataset: study_15982
+  - dataset: data_schema.yaml
   - auditor/sequential: auditor.yaml
   - auditor/static: auditor.yaml
   - vocabulary: vocab

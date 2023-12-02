@@ -1,0 +1,67 @@
+# config/dataset/luxo.yaml
+
+path_to_data: "../data"
+study_name: "toy_cancer_study"
+study_data_config:
+  data_static.pkl:
+    - uid
+    - sex
+    - race
+
+  data_sequential.pkl:
+    - uid
+    - date
+    - lesion_size
+
+merge_tabels_on:
+  - uid
+
+feature_set:
+  static_columns:
+    - sex
+    - race
+
+  event_columns:
+    - day_count # DON'T REMOVE: date is autiomatically converted to day_count feature
+    - lesion_size
+
+  continous_cols:
+    - lesion_size
+
+  count_variables:
+    - day_count # DON'T REMOVE: date is autiomatically converted to day_count feature
+
+  num_cols:
+    - day_count # DDON'T REMOVE: date is autiomatically converted to day_count feature
+    - lesion_size
+
+  unique_id_cols:
+    - uid
+  
+  time_col: date
+
+privacy_audit:
+  quasi_identifier_cols:
+    - sex
+    - race
+  sensitive_cols:
+    - lesion_size
+    - day_count
+
+
+##################################################
+# From here on only relevant for sequential data #
+##################################################
+# Leave records empty if it does not apply for your use case
+fidelity_audit:
+  cross_corr_col_pairs:
+    - ["lesion_size", "day_count"]
+
+sequence_schema:
+  primary_id: uid
+  use_secondary_id: Flase 
+  secondary_id:
+  secondary_id_options:
+  first_event_key_col:
+  first_event_key_value:
+  elements_per_primary_id:
